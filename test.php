@@ -15,14 +15,14 @@ echo $ur->getMonitors($monitors, 1, 0);                     // gets only specifi
 # addMonitor
 $new = array(
     'name' => 'Google',
-    'url' => 'http://www.google.com/',
+    'uri' => 'http://www.google.com/',
     'type' => 1
 );
-echo $ur->addMonitor($new);                                 // adds a new monitor
+echo $ur->newMonitor($new);                                 // adds a new monitor
 
 # editMonitor
 $edit = array(
-    'name' => 'MyMedia for WordPress',
+    'name' => 'MyMedia (for WordPress)',
 );
 echo $ur->editMonitor(115549, $edit);                       // edits an existing monitor's values
 
