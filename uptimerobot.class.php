@@ -5,7 +5,8 @@ class UptimeRobot
 	private $base_uri = 'http://api.uptimerobot.com/';
 	private $apiKey;
 	private $format = "json";
-	
+	private $json_encap = "jsonUptimeRobotApi()";
+    
     /**
     * Public constructor function
     * 
@@ -61,15 +62,24 @@ class UptimeRobot
     * @param mixed $url required
     */
     private function __fetch($url) 
-    {
-        if (!isset($url)) return false;
+    {   
+        if (empty ($url)) {
+            throw new Exception('Value not specified: url', 1);
+        }
         $ch = curl_init(); 
         curl_setopt ($ch, CURLOPT_URL, $url);
         curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        $file_contents = curl_exec($ch);
-        curl_close($ch);
-        return $file_contents;
+        $file_contents = curl_exec ($ch);
+        curl_close ($ch);
+
+        switch ($this->format) {
+            case "xml":
+                return $file_contents;              
+            default:
+                return substr ($file_contents, strlen($this->json_encap) - 1, strlen ($file_contents) - strlen($this->json_encap));                                   
+        }      
+        return false;
     }
     
     /**
@@ -83,6 +93,9 @@ class UptimeRobot
     */
 	public function getMonitors($monitors = array(), $logs = 0, $alertContacts = 0)
 	{   
+        if (empty($this->apiKey)) {
+            throw new Exception('Property not set: apiKey', 2);    
+        }
         $url =  "{$this->base_uri}/getMonitors?apiKey={$this->apiKey}";
 		if (!empty($monitors)) $url .= "&monitors=" . implode('-', $monitors);                    
 		$url .= "&logs=$logs&alertContacts=$alertContacts&format={$this->format}";
@@ -104,9 +117,16 @@ class UptimeRobot
     *    keyword_type   - optional (required for keyword monitoring)
     *    keyword_value  - optional (required for keyword monitoring)
     */
-    public function newMonitor($params = array())
+    public function addMonitor($params = array())
     {
-        extract($params);
+        if (empty($params['name']) || empty($params['uri']) || empty($params['type'])) {
+            throw new Exception('Required key "name", "uri" or "type" not specified', 3);
+        } else {
+            extract($params);
+        }
+        if (empty($this->apiKey)) {
+            throw new Exception('Property not set: apiKey', 2);    
+        }
         
         $url =  "{$this->base_uri}/addMonitor?apiKey={$this->apiKey}&monitorFriendlyName=$name&monitorURL=$uri&monitorType=$type";
         
@@ -140,7 +160,14 @@ class UptimeRobot
     */
     public function editMonitor($monitorId, $params = array())
     {
-        extract($params);
+        if (empty($params)) {
+            throw new Exception('Value not specified: params', 1);
+        } else {
+            extract($params);
+        }
+        if (empty($this->apiKey)) {
+            throw new Exception('Property not set: apiKey', 2);    
+        }
         
         $url = "{$this->base_uri}/editMonitor?apiKey={$this->apiKey}&monitorID=$monitorId";
 
@@ -164,6 +191,13 @@ class UptimeRobot
     */
     public function deleteMonitor($monitorId)
     {
+        if (empty($monitorId)) {
+            throw new Exception('Value not specified: monitorId', 1);
+        }
+        if (empty($this->apiKey)) {
+            throw new Exception('Property not set: apiKey', 2);    
+        }
+        
         $url = "{$this->base_uri}/deleteMonitor?apiKey={$this->apiKey}&monitorID=$monitorId&format={$this->format}";
         
         return $this->__fetch($url);    
