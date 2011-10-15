@@ -33,6 +33,9 @@ class UptimeRobot
     */
     public function setApiKey($apiKey)
     {
+        if (empty($apiKey)) {
+            throw new Exception('Value not specified: apiKey', 1);
+        }
         $this->apiKey = $apiKey;
     }
     
@@ -52,6 +55,9 @@ class UptimeRobot
     */
     public function setFormat($format)
     {
+        if (empty($format)) {
+            throw new Exception('Value not specified: format', 1);
+        }
         $this->format = $format;
     }
     
@@ -62,7 +68,9 @@ class UptimeRobot
     */
     private function __fetch($url) 
     {
-        if (!isset($url)) return false;
+        if (empty($url)) {
+            throw new Exception('Value not specified: url', 1);
+        }
         $ch = curl_init(); 
         curl_setopt ($ch, CURLOPT_URL, $url);
         curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -106,7 +114,11 @@ class UptimeRobot
     */
     public function newMonitor($params = array())
     {
-        extract($params);
+        if (empty($params)) {
+            throw new Exception('Value not specified: params', 1);
+        } else {
+            extract($params);
+        }
         
         $url =  "{$this->base_uri}/addMonitor?apiKey={$this->apiKey}&monitorFriendlyName=$name&monitorURL=$uri&monitorType=$type";
         
@@ -140,7 +152,11 @@ class UptimeRobot
     */
     public function editMonitor($monitorId, $params = array())
     {
-        extract($params);
+        if (empty($params)) {
+            throw new Exception('Value not specified: params', 1);
+        } else {
+            extract($params);
+        }
         
         $url = "{$this->base_uri}/editMonitor?apiKey={$this->apiKey}&monitorID=$monitorId";
 
@@ -164,6 +180,10 @@ class UptimeRobot
     */
     public function deleteMonitor($monitorId)
     {
+        if (empty($monitorId)) {
+            throw new Exception('Value not specified: monitorId', 1);
+        }
+        
         $url = "{$this->base_uri}/deleteMonitor?apiKey={$this->apiKey}&monitorID=$monitorId&format={$this->format}";
         
         return $this->__fetch($url);    
