@@ -34,6 +34,9 @@ class UptimeRobot
     */
     public function setApiKey($apiKey)
     {
+        if (empty($apiKey)) {
+            throw new Exception('Value not specified: apiKey', 1);
+        }
         $this->apiKey = $apiKey;
     }
     
@@ -53,6 +56,9 @@ class UptimeRobot
     */
     public function setFormat($format)
     {
+        if (empty($format)) {
+            throw new Exception('Value not specified: format', 1);
+        }
         $this->format = $format;
     }
     
@@ -62,8 +68,8 @@ class UptimeRobot
     * @param mixed $url required
     */
     private function __fetch($url) 
-    {   
-        if (empty ($url)) {
+    {
+        if (empty($url)) {
             throw new Exception('Value not specified: url', 1);
         }
         $ch = curl_init(); 
@@ -127,7 +133,7 @@ class UptimeRobot
         if (empty($this->apiKey)) {
             throw new Exception('Property not set: apiKey', 2);    
         }
-        
+
         $url =  "{$this->base_uri}/addMonitor?apiKey={$this->apiKey}&monitorFriendlyName=$name&monitorURL=$uri&monitorType=$type";
         
         if (isset($subtype)) $url .= "&monitorSubType=$subtype";

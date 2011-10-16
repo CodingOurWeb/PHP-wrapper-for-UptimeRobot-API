@@ -4,7 +4,7 @@ require_once('uptimerobot.class.php');
 
 $UR = new UptimeRobot("");        
 $UR->setFormat('xml');   
-$UR->setApiKey("YOU-API-KEY-HERE");            
+$UR->setApiKey("YOUR-API-KEY-HERE");            
 
 try {
     $params = array(
