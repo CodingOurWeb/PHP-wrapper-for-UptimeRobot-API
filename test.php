@@ -2,7 +2,7 @@
 
 require_once('uptimerobot.class.php');
 
-$ur = new UptimeRobot("YOUR-API-KEY-GOES-HERE");   // instantiates new UptimeRobot object        
+$ur = new UptimeRobot("YOUR-API-KEY-HERE");   // instantiates new UptimeRobot object        
 $ur->setFormat('json');                            // sets output format
 
 # getMonitors

@@ -3,7 +3,7 @@
 require_once('uptimerobot.class.php');
 
 $UR = new UptimeRobot("");        
-$UR->setFormat('xml');   
+$UR->setFormat('json');   
 $UR->setApiKey("YOUR-API-KEY-HERE");            
 
 try {
@@ -12,7 +12,7 @@ try {
         'uri' => 'http://www.google.com/',
         'type' => 1
     );
-    $result = $UR->addMonitor($params);
+    $result = $UR->newMonitor($params);
     print_r($result);    
 } 
 catch (Exception $ex) {

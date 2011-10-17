@@ -123,7 +123,7 @@ class UptimeRobot
     *    keyword_type   - optional (required for keyword monitoring)
     *    keyword_value  - optional (required for keyword monitoring)
     */
-    public function addMonitor($params = array())
+    public function newMonitor($params = array())
     {
         if (empty($params['name']) || empty($params['uri']) || empty($params['type'])) {
             throw new Exception('Required key "name", "uri" or "type" not specified', 3);
@@ -134,7 +134,7 @@ class UptimeRobot
             throw new Exception('Property not set: apiKey', 2);    
         }
 
-        $url =  "{$this->base_uri}/addMonitor?apiKey={$this->apiKey}&monitorFriendlyName=$name&monitorURL=$uri&monitorType=$type";
+        $url =  "{$this->base_uri}/newMonitor?apiKey={$this->apiKey}&monitorFriendlyName=$name&monitorURL=$uri&monitorType=$type";
         
         if (isset($subtype)) $url .= "&monitorSubType=$subtype";
         if (isset($port)) $url .= "&monitorPort=$port";
